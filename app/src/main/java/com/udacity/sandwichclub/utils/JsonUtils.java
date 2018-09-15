@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JsonUtils {
@@ -13,7 +15,7 @@ public class JsonUtils {
     public static Sandwich parseSandwichJson(String json) throws JSONException {
         // these fields will describa a Sandwhich
         //Name is a list of Mainname and alsoKnownAs
-        final String SANDWICH_NAME = "Name";
+        final String SANDWICH_NAME = "name";
 
         final String SANDWICH_MAINNAME = "mainName";
         final String SANDWICH_KNOW_AS = "alsoKnownAs";
@@ -24,11 +26,11 @@ public class JsonUtils {
 
 
         String mainName;
-        List<String> alsoKnownAs = null;
+        List<String> alsoKnownAs = new ArrayList<>();
         String placeOfOrigin;
         String description;
         String image;
-        List<String> ingredients = null;
+        List<String> ingredients = new ArrayList<>();
 
 
         /* String array to hold each sandwich's  String  that will help us to buils a Sandwhich object*/

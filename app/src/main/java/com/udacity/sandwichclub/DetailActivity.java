@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -17,7 +18,14 @@ public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
     Sandwich sandwich;
-    Sandwich sandwich2;
+
+    //fields for View
+    //private ImageView mImageView;
+    private TextView mOriginTextView;
+    private TextView mDescriptionTextView;
+    private TextView mIngredientsTextView;
+    private TextView mAlsoKnownTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +33,12 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
+        //initialisation of views
+        //mImageView =findViewById(R.id.image_iv);
+        mOriginTextView = findViewById(R.id.origin_tv);
+        mDescriptionTextView =findViewById(R.id.description_tv);
+        mIngredientsTextView =findViewById(R.id.ingredients_tv);
+        mAlsoKnownTextView =findViewById(R.id.also_known_tv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -43,8 +57,7 @@ public class DetailActivity extends AppCompatActivity {
         //Sandwich sandwich = null;
         try {
             sandwich = JsonUtils.parseSandwichJson(json);
-            sandwich2 = new Sandwich("toto", null, "tata", "rien du tout", "image", null);
-            //int a=3;
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -64,10 +77,21 @@ public class DetailActivity extends AppCompatActivity {
 
     private void closeOnError() {
         finish();
-        Toast.makeText(this, R.string.detail_error_message+sandwich2.getMainName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
     private void populateUI() {
 
+        mOriginTextView.setText(sandwich.getPlaceOfOrigin());
+        //we need first to crete a String from a List
+        mAlsoKnownTextView.setText(sandwich.getAlsoKnownAs().toString());
+
+        //We also need to create a String from a list for displaying Ingredient
+        mIngredientsTextView.setText(sandwich.getIngredients().toString());
+
+        //display the description
+        mDescriptionTextView.setText(sandwich.getDescription());
+
+        Toast.makeText(this, "fonction populate", Toast.LENGTH_SHORT).show();
     }
 }
