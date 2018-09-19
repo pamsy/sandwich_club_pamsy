@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,9 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 
 import org.json.JSONException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
@@ -20,26 +24,20 @@ public class DetailActivity extends AppCompatActivity {
     Sandwich sandwich;
 
     //fields for View
-    //private ImageView mImageView;
-    private TextView mOriginTextView;
-    private TextView mDescriptionTextView;
-    private TextView mIngredientsTextView;
-    private TextView mAlsoKnownTextView;
+    //initialisation of views
+
+    @BindView(R.id.image_iv)ImageView ingredientsIv;
+    @BindView(R.id.origin_tv)TextView mOriginTextView;
+    @BindView(R.id.description_tv)TextView mDescriptionTextView;
+    @BindView(R.id.ingredients_tv)TextView mIngredientsTextView;
+    @BindView(R.id.also_known_tv)TextView mAlsoKnownTextView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        ImageView ingredientsIv = findViewById(R.id.image_iv);
-        //initialisation of views
-        //mImageView =findViewById(R.id.image_iv);
-        mOriginTextView = findViewById(R.id.origin_tv);
-        mDescriptionTextView =findViewById(R.id.description_tv);
-        mIngredientsTextView =findViewById(R.id.ingredients_tv);
-        mAlsoKnownTextView =findViewById(R.id.also_known_tv);
-
+        ButterKnife.bind(this);
         Intent intent = getIntent();
         if (intent == null) {
             closeOnError();
@@ -70,6 +68,8 @@ public class DetailActivity extends AppCompatActivity {
         populateUI();
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .placeholder(R.drawable.user_placeholder)
+                .error(R.drawable.user_placeholder_error)
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
@@ -82,15 +82,16 @@ public class DetailActivity extends AppCompatActivity {
 
     private void populateUI() {
 
-        mOriginTextView.setText(sandwich.getPlaceOfOrigin());
+        mOriginTextView.setText(sandwich.getPlaceOfOrigin().toString());
         //we need first to crete a String from a List
-        mAlsoKnownTextView.setText(sandwich.getAlsoKnownAs().toString());
+       // mAlsoKnownTextView.setText(sandwich.getAlsoKnownAs().toString());
+          mAlsoKnownTextView.setText(TextUtils.join(", ", sandwich.getAlsoKnownAs()));
 
         //We also need to create a String from a list for displaying Ingredient
         mIngredientsTextView.setText(sandwich.getIngredients().toString());
 
         //display the description
-        mDescriptionTextView.setText(sandwich.getDescription());
+        mDescriptionTextView.setText(sandwich.getDescription().toString());
 
         Toast.makeText(this, "fonction populate", Toast.LENGTH_SHORT).show();
     }
